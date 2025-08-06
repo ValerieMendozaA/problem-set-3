@@ -5,13 +5,11 @@ PART 3: MAIN SCRIPT
 - Keep outputs clear and organized
 '''
 
-from src.preprocessing import load_data, process_data
-from src.metrics_calculation import calculate_metrics, calculate_sklearn_metrics
+from src.preprocessing import load_data, process_data from src.metrics_calculation import calculate_metrics, calculate_sklearn_metrics
 
 def main():
     # Load and process data
-    model_pred_df, genres_df = load_data()
-    genre_list, genre_true_counts, genre_tp_counts, genre_fp_counts = process_data(model_pred_df, genres_df)
+    model_pred_df, genres_df = load_data()  genre_list, genre_true_counts, genre_tp_counts, genre_fp_counts = process_data(model_pred_df, genres_df)
 
     # Calculate manual metrics
     micro_metrics, macro_precision, macro_recall, macro_f1 = calculate_metrics(

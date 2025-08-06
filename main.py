@@ -1,47 +1,44 @@
 '''
-This is the main.py to run the data processing and metrics calculations
-You will run this project from here, so make sure to set things up and return values accordingly
-Hint: Pay attention to the print statements below for both variable names and kinda of values you should return in the other files
+PART 3: MAIN SCRIPT
+- This is the only file that will be run directly
+- It should call all functions from other files
+- Keep outputs clear and organized
 '''
-import numpy as np
+
 from src.preprocessing import load_data, process_data
 from src.metrics_calculation import calculate_metrics, calculate_sklearn_metrics
 
 def main():
-
-    # Load data from CSV files
+    # Load and process data
     model_pred_df, genres_df = load_data()
-    
-    # Process data to get genre counts and predictions
     genre_list, genre_true_counts, genre_tp_counts, genre_fp_counts = process_data(model_pred_df, genres_df)
-    
-    # Calculate micro and macro metrics
-    micro_precision, micro_recall, micro_f1, macro_prec_list, macro_recall_list, macro_f1_list = calculate_metrics(model_pred_df, genre_list, genre_true_counts, genre_tp_counts, genre_fp_counts)
-    
-    # Print micro metrics
-    print("Micro-Precision:", micro_precision)
-    print("Micro-Recall:", micro_recall)
-    print("Micro-F1:", micro_f1)
-    
-    # Print macro metrics
-    print("-" * 20)
-    print("Macro-Precision:", np.mean(macro_prec_list))
-    print("Macro-Recall:", np.mean(macro_recall_list))
-    print("Macro-F1:", np.mean(macro_f1_list))
-    
-    # Calculate and print metrics using sklearn
-    macro_prec, macro_rec, macro_f1, micro_prec, micro_rec, micro_f1 = calculate_sklearn_metrics(model_pred_df, genre_list)
-    
-    print("-" * 20)
-    print("Macro-Precision:", macro_prec)
-    print("Macro-Recall:", macro_rec)
-    print("Macro-F1:", macro_f1)
-    
-    print("-" * 20)
-    print("Micro-Precision:", micro_prec)
-    print("Micro-Recall:", micro_rec)
-    print("Micro-F1:", micro_f1)
+
+    # Calculate manual metrics
+    micro_metrics, macro_precision, macro_recall, macro_f1 = calculate_metrics(
+        model_pred_df, genre_list, genre_true_counts, genre_tp_counts, genre_fp_counts
+    )
+
+    # Calculate sklearn metrics
+    macro_sk, micro_sk = calculate_sklearn_metrics(model_pred_df, genre_list)
+
+    # Print manual metrics
+    print("=== MANUAL METRICS ===")
+    print("Micro Precision:", round(micro_metrics[0], 3))
+    print("Micro Recall:", round(micro_metrics[1], 3))
+    print("Micro F1 Score:", round(micro_metrics[2], 3))
+    print("Macro Precision (avg):", round(sum(macro_precision) / len(macro_precision), 3))
+    print("Macro Recall (avg):", round(sum(macro_recall) / len(macro_recall), 3))
+    print("Macro F1 Score (avg):", round(sum(macro_f1) / len(macro_f1), 3))
+
+    # Print sklearn metrics
+    print("\n=== SKLEARN METRICS ===")
+    print("Macro Precision:", round(macro_sk[0], 3))
+    print("Macro Recall:", round(macro_sk[1], 3))
+    print("Macro F1 Score:", round(macro_sk[2], 3))
+    print("Micro Precision:", round(micro_sk[0], 3))
+    print("Micro Recall:", round(micro_sk[1], 3))
+    print("Micro F1 Score:", round(micro_sk[2], 3))
+
 
 if __name__ == "__main__":
     main()
-
